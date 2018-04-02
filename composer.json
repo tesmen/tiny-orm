@@ -13,9 +13,6 @@
       "email": "tezmo@mail.ru"
     }
   ],
-  "require-dev": {
-    "phpunit/phpunit": "4.8.*"
-  },
   "autoload": {
     "psr-4": {
       "TinyORM\\": "src/TinyORM"
