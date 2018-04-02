@@ -3,6 +3,7 @@
 namespace TinyORM;
 
 use TinyORM\Base\Connection;
+use TinyORM\Base\QueryBuilder;
 use TinyORM\Base\Smart;
 
 class ActiveRecord extends Smart
@@ -62,9 +63,10 @@ class ActiveRecord extends Smart
 
     public static function findById($id)
     {
-        $table = static::$tableName;
-        $sql = "SELECT * FROM {$table} WHERE id = {intval($id)} LIMIT 1";
-        $records = static::getConnection()->query($sql);
+        $id = intval($id);
+        $qb = new QueryBuilder(static::$tableName);
+        $qb->addCondition("id = {$id}");
+        $records = static::getConnection()->query($qb->getQuery());
 
         if (empty($records)) {
             return null;
