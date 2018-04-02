@@ -74,4 +74,9 @@ class ActiveRecord extends Smart
 
         return new static(reset($records));
     }
+
+    public static function createQueryBuilder()
+    {
+        return new QueryBuilder(static::$tableName);
+    }
 }

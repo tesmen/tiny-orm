@@ -163,10 +163,13 @@ class QueryBuilder extends BaseQueryBuilder
     public function getBindParameters()
     {
         $unionParameters = [];
+
         foreach ($this->unions as $qb) {
             $unionParameters = array_merge($unionParameters, $qb->getBindParameters());
         }
+
         $withParameters = [];
+
         foreach ($this->with as $qb) {
             $withParameters = array_merge($withParameters, $qb->getBindParameters());
         }
