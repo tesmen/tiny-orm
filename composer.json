@@ -1,16 +1,18 @@
 {
-    "name": "tesmen/tiny-orm",
-    "description": "PHP tiny ORM lib",
-    "authors": [
-        {
-            "name": "Tesmen",
-            "email": "tezmo@mail.ru"
-        }
-    ],
-    "require-dev": {
-        "phpunit/phpunit": "4.8.*"
-    },
-    "autoload": {
-        "psr-4": {"TinyORM\\": "src/TinyORM"}
+  "name": "tesmen/tiny-orm",
+  "description": "PHP tiny ORM lib",
+  "authors": [
+    {
+      "name": "Tesmen",
+      "email": "tezmo@mail.ru"
     }
+  ],
+  "require-dev": {
+    "phpunit/phpunit": "4.8.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "TinyORM\\": "src/TinyORM"
+    }
+  }
 }
