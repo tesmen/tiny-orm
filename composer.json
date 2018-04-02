@@ -1,5 +1,6 @@
 {
   "name": "tesmen/tiny-orm",
+  "version": "0.1",
   "description": "PHP tiny ORM lib",
   "repositories": [
     {
