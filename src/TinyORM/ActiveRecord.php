@@ -46,7 +46,6 @@ class ActiveRecord extends Smart
         $fields = implode('`,`', array_keys($this->aDataDiff));
         $values = implode("','", array_values($this->aDataDiff));
         $sql = "INSERT INTO {$table} (`{$fields}`) VALUES ('{$values}')";
-
         $this->aDataDiff = [];
 
         return static::getConnection()->query($sql);
