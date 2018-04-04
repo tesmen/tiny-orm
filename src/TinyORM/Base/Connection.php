@@ -134,14 +134,18 @@ class Connection
 
     /**
      * @param $sql
-     * @return array
+     * @return array|bool|\PDOStatement
      */
     public function query($sql)
     {
         $st = $this->pdo->query($sql);
 
         if (strpos(strtolower($sql), 'insert') !== false) {
-            return $st;
+            return $st->rowCount();
+        }
+
+        if (strpos(strtolower($sql), 'update') !== false) {
+            return $st->rowCount();
         }
 
         return $st->fetchAll(PDO::FETCH_ASSOC);
