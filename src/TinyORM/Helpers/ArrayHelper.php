@@ -1,13 +1,13 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @link http://www.TinyORMframework.com/
+ * @copyright Copyright (c) 2008 TinyORM Software LLC
+ * @license http://www.TinyORMframework.com/license/
  */
 
-namespace yii\helpers;
+namespace TinyORM\helpers;
 
-use Yii;
+use TinyORM;
 use TinyORM\Interfaces\Arrayable;
 use TinyORM\Exceptions\ InvalidParamException;
 
@@ -159,17 +159,17 @@ class ArrayHelper
      *
      * ```php
      * // working with array
-     * $username = \yii\helpers\ArrayHelper::getValue($_POST, 'username');
+     * $username = \TinyORM\helpers\ArrayHelper::getValue($_POST, 'username');
      * // working with object
-     * $username = \yii\helpers\ArrayHelper::getValue($user, 'username');
+     * $username = \TinyORM\helpers\ArrayHelper::getValue($user, 'username');
      * // working with anonymous function
-     * $fullName = \yii\helpers\ArrayHelper::getValue($user, function ($user, $defaultValue) {
+     * $fullName = \TinyORM\helpers\ArrayHelper::getValue($user, function ($user, $defaultValue) {
      *     return $user->firstName . ' ' . $user->lastName;
      * });
      * // using dot format to retrieve the property of embedded object
-     * $street = \yii\helpers\ArrayHelper::getValue($users, 'address.street');
+     * $street = \TinyORM\helpers\ArrayHelper::getValue($users, 'address.street');
      * // using an array of keys to retrieve the value
-     * $value = \yii\helpers\ArrayHelper::getValue($versions, ['1.0', 'date']);
+     * $value = \TinyORM\helpers\ArrayHelper::getValue($versions, ['1.0', 'date']);
      * ```
      *
      * @param array|object $array array or object to extract value from
@@ -300,7 +300,7 @@ class ArrayHelper
      * ```php
      * // $array = ['type' => 'A', 'options' => [1, 2]];
      * // working with array
-     * $type = \yii\helpers\ArrayHelper::remove($array, 'type');
+     * $type = \TinyORM\helpers\ArrayHelper::remove($array, 'type');
      * // $array content
      * // $array = ['options' => [1, 2]];
      * ```
@@ -329,7 +329,7 @@ class ArrayHelper
      *
      * ```php
      * $array = ['Bob' => 'Dylan', 'Michael' => 'Jackson', 'Mick' => 'Jagger', 'Janet' => 'Jackson'];
-     * $removed = \yii\helpers\ArrayHelper::removeValue($array, 'Jackson');
+     * $removed = \TinyORM\helpers\ArrayHelper::removeValue($array, 'Jackson');
      * // result:
      * // $array = ['Bob' => 'Dylan', 'Mick' => 'Jagger'];
      * // $removed = ['Michael' => 'Jackson', 'Janet' => 'Jackson'];
@@ -675,14 +675,14 @@ class ArrayHelper
      * @param bool $valuesOnly whether to encode array values only. If false,
      * both the array keys and array values will be encoded.
      * @param string $charset the charset that the data is using. If not set,
-     * [[\yii\base\Application::charset]] will be used.
+     * [[\TinyORM\base\Application::charset]] will be used.
      * @return array the encoded data
      * @see http://www.php.net/manual/en/function.htmlspecialchars.php
      */
     public static function htmlEncode($data, $valuesOnly = true, $charset = null)
     {
         if ($charset === null) {
-            $charset = Yii::$app ? Yii::$app->charset : 'UTF-8';
+            $charset = TinyORM::$app ? TinyORM::$app->charset : 'UTF-8';
         }
         $d = [];
         foreach ($data as $key => $value) {
@@ -892,20 +892,20 @@ class ArrayHelper
      *     'E' => 1,
      * ];
      *
-     * $result = \yii\helpers\ArrayHelper::filter($array, ['A']);
+     * $result = \TinyORM\helpers\ArrayHelper::filter($array, ['A']);
      * // $result will be:
      * // [
      * //     'A' => [1, 2],
      * // ]
      *
-     * $result = \yii\helpers\ArrayHelper::filter($array, ['A', 'B.C']);
+     * $result = \TinyORM\helpers\ArrayHelper::filter($array, ['A', 'B.C']);
      * // $result will be:
      * // [
      * //     'A' => [1, 2],
      * //     'B' => ['C' => 1],
      * // ]
      *
-     * $result = \yii\helpers\ArrayHelper::filter($array, ['B', '!B.C']);
+     * $result = \TinyORM\helpers\ArrayHelper::filter($array, ['B', '!B.C']);
      * // $result will be:
      * // [
      * //     'B' => ['D' => 2],

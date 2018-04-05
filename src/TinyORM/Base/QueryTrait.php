@@ -3,7 +3,7 @@
 namespace TinyORM\Base;
 
 
-use yii\base\NotSupportedException;
+use TinyORM\base\NotSupportedException;
 
 trait QueryTrait
 {

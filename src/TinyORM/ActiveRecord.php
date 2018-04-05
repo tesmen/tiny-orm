@@ -30,7 +30,7 @@ abstract class ActiveRecord extends Smart
      */
     public static function getConnection()
     {
-        return self::$connection;
+        return static::$connection;
     }
 
     /**
@@ -38,11 +38,11 @@ abstract class ActiveRecord extends Smart
      */
     public static function setConnection($connection)
     {
-        if (self::$connection) {
+        if (static::$connection) {
             return;
         }
 
-        self::$connection = $connection;
+        static::$connection = $connection;
     }
 
     private function isNewRecord()

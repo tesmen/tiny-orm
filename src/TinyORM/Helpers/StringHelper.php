@@ -1,13 +1,13 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @link http://www.TinyORMframework.com/
+ * @copyright Copyright (c) 2008 TinyORM Software LLC
+ * @license http://www.TinyORMframework.com/license/
  */
 
 namespace TinyORM\Helpers;
 
-use Yii;
+use TinyORM;
 
 /**
  * BaseStringHelper provides concrete implementation for [[StringHelper]].
@@ -105,7 +105,7 @@ class StringHelper
     public static function truncate($string, $length, $suffix = '...', $encoding = null, $asHtml = false)
     {
         if ($encoding === null) {
-            $encoding = Yii::$app ? Yii::$app->charset : 'UTF-8';
+            $encoding = TinyORM::$app ? TinyORM::$app->charset : 'UTF-8';
         }
         if ($asHtml) {
             return static::truncateHtml($string, $length, $suffix, $encoding);
@@ -155,8 +155,8 @@ class StringHelper
     protected static function truncateHtml($string, $count, $suffix, $encoding = false)
     {
         $config = \HTMLPurifier_Config::create(null);
-        if (Yii::$app !== null) {
-            $config->set('Cache.SerializerPath', Yii::$app->getRuntimePath());
+        if (TinyORM::$app !== null) {
+            $config->set('Cache.SerializerPath', TinyORM::$app->getRuntimePath());
         }
         $lexer = \HTMLPurifier_Lexer::create($config);
         $tokens = $lexer->tokenizeHTML($string, $config, new \HTMLPurifier_Context());
@@ -222,7 +222,7 @@ class StringHelper
             return strncmp($string, $with, $bytes) === 0;
 
         }
-        $encoding = Yii::$app ? Yii::$app->charset : 'UTF-8';
+        $encoding = TinyORM::$app ? TinyORM::$app->charset : 'UTF-8';
         return mb_strtolower(mb_substr($string, 0, $bytes, '8bit'), $encoding) === mb_strtolower($with, $encoding);
     }
 
@@ -249,7 +249,7 @@ class StringHelper
             return substr_compare($string, $with, -$bytes, $bytes) === 0;
         }
 
-        $encoding = Yii::$app ? Yii::$app->charset : 'UTF-8';
+        $encoding = TinyORM::$app ? TinyORM::$app->charset : 'UTF-8';
         return mb_strtolower(mb_substr($string, -$bytes, mb_strlen($string, '8bit'), '8bit'), $encoding) === mb_strtolower($with, $encoding);
     }
 

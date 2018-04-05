@@ -1,13 +1,13 @@
 <?php
 /**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+ * @link http://www.TinyORMframework.com/
+ * @copyright Copyright (c) 2008 TinyORM Software LLC
+ * @license http://www.TinyORMframework.com/license/
  */
 
 namespace TinyORM\Helpers;
 
-use Yii;
+use TinyORM;
 
 /**
  * BaseInflector provides concrete implementation for [[Inflector]].
@@ -583,7 +583,7 @@ class Inflector
     public static function sentence(array $words, $twoWordsConnector = null, $lastWordConnector = null, $connector = ', ')
     {
         if ($twoWordsConnector === null) {
-            $twoWordsConnector = Yii::t('yii', ' and ');
+            $twoWordsConnector = TinyORM::t('TinyORM', ' and ');
         }
         if ($lastWordConnector === null) {
             $lastWordConnector = $twoWordsConnector;
