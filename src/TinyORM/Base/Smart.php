@@ -16,28 +16,28 @@ class Smart
     }
 
     /**
-     * @param $name
+     * @param $key
      * @return bool
      */
-    public function __get($name)
+    public function __get($key)
     {
-        if (isset($this->aDataDiff[$name])) {
-            return $this->aDataDiff[$name];
+        if (isset($this->aDataDiff[$key])) {
+            return $this->aDataDiff[$key];
         }
-        if (isset($this->aData[$name])) {
-            return $this->aData[$name];
+        if (isset($this->aData[$key])) {
+            return $this->aData[$key];
         }
 
-        return NULL;
+        return null;
     }
 
     /**
-     * @param $name
+     * @param $key
      * @param $value
      */
-    public function __set($name, $value)
+    public function __set($key, $value)
     {
-        $this->aDataDiff[$name] = $value;
+        $this->aDataDiff[$key] = $value;
     }
 
     /**

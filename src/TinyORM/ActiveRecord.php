@@ -70,7 +70,6 @@ abstract class ActiveRecord extends Smart
         $assignmentsStr = implode(',', $assignments);
 
         $sql = "UPDATE {$table} SET {$assignmentsStr} WHERE id={$this->id}";
-        $this->aDataDiff = [];
 
         return static::getConnection()->query($sql);
     }
@@ -86,7 +85,7 @@ abstract class ActiveRecord extends Smart
         if ($id) {
             $primaryName = static::$primaryKey;
             $this->$primaryName = $id;
-            $this->flush();
+
         }
 
         return $id;
@@ -94,17 +93,23 @@ abstract class ActiveRecord extends Smart
 
     private function flush()
     {
-        $this->aData = $this->aDataDiff;
+        $this->aData = array_merge($this->aData, $this->aDataDiff);
         $this->aDataDiff = [];
     }
 
     public function save()
     {
         if ($this->isNewRecord()) {
-            return $this->insert();
+            $res = $this->insert();
         } else {
-            return $this->update();
+            $res = $this->update();
         }
+
+        if ($res) {
+            $this->flush();
+        }
+
+        return $res;
     }
 
     /**
