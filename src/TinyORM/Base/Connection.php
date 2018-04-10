@@ -141,7 +141,7 @@ class Connection
         $st = $this->pdo->query($sql);
 
         if (strpos(strtolower($sql), 'insert') !== false) {
-            return $st->rowCount();
+            return $this->pdo->lastInsertId();
         }
 
         if (strpos(strtolower($sql), 'update') !== false) {

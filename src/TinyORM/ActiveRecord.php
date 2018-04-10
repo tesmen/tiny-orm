@@ -23,7 +23,7 @@ abstract class ActiveRecord extends Smart
     /**
      * @var Connection $connection
      */
-    private static $connection;
+    protected static $connection;
 
     /**
      * @return Connection
@@ -47,7 +47,7 @@ abstract class ActiveRecord extends Smart
 
     private function isNewRecord()
     {
-        return empty($this->aData['id']);
+        return empty($this->aData[static::$primaryKey]);
     }
 
     private function update()
@@ -80,10 +80,22 @@ abstract class ActiveRecord extends Smart
         $table = static::$tableName;
         $fields = implode('`,`', array_keys($this->aDataDiff));
         $values = implode("','", array_values($this->aDataDiff));
-        $sql = "INSERT INTO {$table} (`{$fields}`) VALUES ('{$values}')";
-        $this->aDataDiff = [];
+        $sql = "INSERT INTO {$table} (`{$fields}`) VALUES ('{$values}');";
+        $id = static::getConnection()->query($sql);
 
-        return static::getConnection()->query($sql);
+        if ($id) {
+            $primaryName = static::$primaryKey;
+            $this->$primaryName = $id;
+            $this->flush();
+        }
+
+        return $id;
+    }
+
+    private function flush()
+    {
+        $this->aData = $this->aDataDiff;
+        $this->aDataDiff = [];
     }
 
     public function save()
