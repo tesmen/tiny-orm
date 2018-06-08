@@ -4,12 +4,19 @@ namespace TinyORM\Base;
 
 class QueryBuilder extends BaseQueryBuilder
 {
+    protected $table;
+    protected $mainAlias;
+
+    private $conditions = [];
+    private $whereClauseParameters = [];
+
     const ORDER_ASC = 'ASC';
     const ORDER_DESC = 'DESC';
 
     private $selectFields = ['t.*'];
     private $selectParameters = [];
     private $joins = [];
+
 
     /**  @var QueryBuilder[] */
     private $unions = [];
@@ -36,6 +43,12 @@ class QueryBuilder extends BaseQueryBuilder
 
     private $comment;
 
+    // new
+    private $newParams = [];
+    private $newConditions = [];
+
+
+    // end new
 
     /**
      * @param string|QueryBuilder $source - table name or subquery builder
@@ -46,6 +59,13 @@ class QueryBuilder extends BaseQueryBuilder
         parent::__construct($source, $mainAlias);
         $this->setSource($source);
         $this->selectFields = [$mainAlias . '.*'];
+    }
+
+    public function bindParam($paramName, $value)
+    {
+        $this->namedParams[$paramName] = $value;
+
+        return $this;
     }
 
     /**
@@ -268,7 +288,8 @@ class QueryBuilder extends BaseQueryBuilder
     public function addHavingCondition($condition, $bind = [])
     {
         $this->havingConditions[] = $condition;
-        $this->havingParameters = array_merge($this->havingParameters, is_array($bind)
+        $this->havingParameters = array_merge(
+            $this->havingParameters, is_array($bind)
             ? $bind
             : [$bind]
         );
@@ -284,7 +305,8 @@ class QueryBuilder extends BaseQueryBuilder
     public function addSelectField($field, $bind = [])
     {
         $this->selectFields[] = $field;
-        $this->selectParameters = array_merge($this->selectParameters, is_array($bind)
+        $this->selectParameters = array_merge(
+            $this->selectParameters, is_array($bind)
             ? $bind
             : [$bind]
         );
@@ -329,7 +351,50 @@ class QueryBuilder extends BaseQueryBuilder
     {
         if (!in_array($join, $this->joins)) {
             $this->joins[] = $join;
-            $this->joinParameters = array_merge($this->joinParameters, is_array($bind)
+            $this->joinParameters = array_merge(
+                $this->joinParameters, is_array($bind)
+                ? $bind
+                : [$bind]
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $join
+     * @param string|array $bind
+     * @return $this
+     */
+    public function leftJoin($join, $bind = [])
+    {
+        $join = 'LEFT JOIN ' . $join;
+
+        if (!in_array($join, $this->joins)) {
+            $this->joins[] = $join;
+            $this->joinParameters = array_merge(
+                $this->joinParameters, is_array($bind)
+                ? $bind
+                : [$bind]
+            );
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string $join
+     * @param string|array $bind
+     * @return $this
+     */
+    public function join($join, $bind = [])
+    {
+        $join = 'JOIN ' . $join;
+
+        if (!in_array($join, $this->joins)) {
+            $this->joins[] = $join;
+            $this->joinParameters = array_merge(
+                $this->joinParameters, is_array($bind)
                 ? $bind
                 : [$bind]
             );
@@ -462,5 +527,66 @@ class QueryBuilder extends BaseQueryBuilder
         $query = preg_replace('~\n\s*?\n~', "\n", $query);
 
         return $query;
+    }
+
+
+    /**
+     * Add WHERE condition
+     * @param string $condition
+     * @param string|array $bind
+     *
+     * @return $this
+     */
+    public function addConditionNew($condition, $bind = [])
+    {
+        $this->newConditions = $condition;
+        preg_match_all('/:([A-Za-z0-9]+)/i', $condition, $mentionedParams);
+
+        var_export($mentionedParams);
+        die;
+    }
+
+    /**
+     * Add WHERE condition
+     * @param string $condition
+     * @param string|array $bind
+     *
+     * @return $this
+     */
+    public function addCondition($condition, $bind = [])
+    {
+        $conditionArr = explode('?', $condition);
+
+        $bind = is_array($bind)
+            ? $bind
+            : [$bind];
+
+        $condition = '';
+
+        foreach ($bind as $key => $value) {
+            if (is_array($value) && ($cnt = count($value)) > 0) {
+                $condition .= $conditionArr[$key] . implode(',', array_pad([], $cnt, '?'));
+                $this->whereClauseParameters = array_merge($this->whereClauseParameters, $value);
+            } else {
+                $condition .= $conditionArr[$key] . '?';
+
+                $this->whereClauseParameters[] = is_array($value)
+                    ? 0
+                    : $value;
+            }
+
+            unset($conditionArr[$key]);
+        }
+
+        $this->conditions[] = $condition . (empty($conditionArr)
+                ? ''
+                : array_shift($conditionArr));
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->getQuery();
     }
 }
